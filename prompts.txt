@@ -1,0 +1,5 @@
+I have an existing FastAPI calculator server with POST /calculate and GET/DELETE /history. Can you confirm you understand that those routes must stay intact while adding Docker and MySQL support?
+
+Can you generate a Dockerfile and .dockerignore for this project that run FastAPI on 0.0.0.0:5000, install dependencies from requirements.txt, and support the ./app development bind mount? Please return the configuration itself.
+
+Can you generate compose.yaml with a backend built from the project root and published as 34242:5000, a MySQL 8.4 database named appdb with user appuser and password classroom-app, the lecture's classroom-root password, a health check, a dbdata named volume, DATABASE_URL=mysql+mysqlconnector://appuser:classroom-app@database:3306/appdb, and backend startup gated on the healthy database? Please return the configuration itself.
