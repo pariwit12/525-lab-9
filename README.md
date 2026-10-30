@@ -50,3 +50,35 @@ uv run pytest -q
 ```
 
 Tests cover percentage expansion, failure handling, dependency overrides, shared history, and compatibility with the React API calls. The fixture clears history before and after each test so tests can run independently.
+
+## Docker Compose and database verification
+
+Start the services from this directory:
+
+```powershell
+docker compose config
+docker compose up --build -d
+docker compose ps
+```
+
+The database reported `healthy`, and the backend was published on port `34242`. The HTTP checks returned:
+
+```text
+GET /test-db
+{"db_result":1}
+
+POST /calculate with {"expr":"100-6%"}
+{"ok":true,"expr":{"expr":"100-6%"},"result":94.0,"error":""}
+```
+
+To check volume persistence, a row was inserted into `lab_check`, then the containers were removed with `docker compose down` and recreated with `docker compose up -d`. After reconnecting to MySQL, `SELECT * FROM lab_check;` still returned:
+
+```text
++----+--------------------------+
+| id | note                     |
++----+--------------------------+
+|  1 | data survives recreation |
++----+--------------------------+
+```
+
+`docker compose down` preserves the declared `dbdata` volume. Do not use `docker compose down -v` for this check.
